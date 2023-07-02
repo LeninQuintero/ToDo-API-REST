@@ -9,7 +9,6 @@ import com.leninprojects.todoapp.service.dto.TaskInDto;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,9 @@ public class TaskService {
     }
 
     public Task createTask(TaskInDto taskInDto){
+        if(taskInDto == null) {
+            throw new IllegalArgumentException();
+        }
         Task task = taskMapper.map(taskInDto);
         return this.repository.save(task);
     }
@@ -33,22 +35,33 @@ public class TaskService {
     }
 
     public  List<Task> findAllByTaskStatus(TaskStatus status) {
+        if(status == null) {
+            throw new IllegalArgumentException();
+        }
         return this.repository.findAllByTaskStatus(status);
     }
     @Transactional
     public void markTaskAsFinished(Long id){
-       Optional<Task> optionalTask = this.repository.findById(id);
-       if(optionalTask.isEmpty()){
-           throw new ToDoExceptions("Task not found", HttpStatus.NOT_FOUND);
-       }
-        this.repository.markTaskAsFinished(id);
+        if(id == null) {
+            throw new IllegalArgumentException();
+        } else {
+            Optional<Task> optionalTask = this.repository.findById(id);
+            if(optionalTask.isEmpty()){
+                throw new ToDoExceptions("Task not found", HttpStatus.NOT_FOUND);
+            }
+            this.repository.markTaskAsFinished(id);
+        }
     }
 
     public void deleteTask(Long id){
-        Optional<Task> optionalTask = this.repository.findById(id);
-        if(optionalTask.isEmpty()){
-            throw new ToDoExceptions("Task not found", HttpStatus.NOT_FOUND);
+        if(id == null) {
+            throw new IllegalArgumentException();
+        } else {
+            Optional<Task> optionalTask = this.repository.findById(id);
+            if (optionalTask.isEmpty()) {
+                throw new ToDoExceptions("Task not found", HttpStatus.NOT_FOUND);
+            }
+            this.repository.deleteById(id);
         }
-        this.repository.deleteById(id);
     }
 }
