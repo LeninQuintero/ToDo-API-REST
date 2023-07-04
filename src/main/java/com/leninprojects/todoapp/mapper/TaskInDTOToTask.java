@@ -4,7 +4,6 @@ import com.leninprojects.todoapp.persistence.entity.Task;
 import com.leninprojects.todoapp.persistence.entity.TaskStatus;
 import com.leninprojects.todoapp.service.dto.TaskInDto;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 
 @Component

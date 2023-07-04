@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import static java.util.Arrays.*;
 import static org.mockito.BDDMockito.given;
 
 class TaskServiceTest {
