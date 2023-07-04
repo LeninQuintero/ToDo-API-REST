@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import static java.util.Arrays.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 class TaskServiceTest {
     private Task task;
@@ -54,8 +54,8 @@ class TaskServiceTest {
 
     @Test
     void createTaskTest() {
-        when(taskInDTOToTask.map(taskInDto)).thenReturn(task);
-        when(taskRepository.save(task)).thenReturn(task);
+        given(taskInDTOToTask.map(taskInDto)).willReturn(task);
+        given(taskRepository.save(task)).willReturn(task);
         Task result = taskService.createTask(taskInDto);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(task, result);
@@ -70,10 +70,10 @@ class TaskServiceTest {
 
     @Test
     void findAllTest() {
-        when(taskRepository.findAll()).thenReturn(asList(task));
+        given(taskRepository.findAll()).willReturn(Collections.singletonList(task));
         List<Task> result = taskService.findAll();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(asList(task), result);
+        Assertions.assertEquals(Collections.singletonList(task), result);
         Mockito.verify(taskRepository).findAll();
     }
 
@@ -81,17 +81,17 @@ class TaskServiceTest {
     @EnumSource(TaskStatus.class)
     void findAllByTaskStatusTest(TaskStatus status) {
         task.setTaskStatus(status);
-        when(taskRepository.findAllByTaskStatus(status)).thenReturn(asList(task));
+        given(taskRepository.findAllByTaskStatus(status)).willReturn(Collections.singletonList(task));
         List<Task> result = taskService.findAllByTaskStatus(status);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(asList(task), result);
+        Assertions.assertEquals(Collections.singletonList(task), result);
         Mockito.verify(taskRepository).findAllByTaskStatus(status);
     }
 
     @ParameterizedTest
     @EnumSource(TaskStatus.class)
     void findAllByTaskStatusWithNoMatchingTasksTest(TaskStatus status) {
-        when(taskRepository.findAllByTaskStatus(status)).thenReturn(Collections.emptyList());
+        given(taskRepository.findAllByTaskStatus(status)).willReturn(Collections.emptyList());
         List<Task> result = taskService.findAllByTaskStatus(status);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
@@ -104,7 +104,7 @@ class TaskServiceTest {
 
     @Test
     void markTaskAsFinishedTest() {
-        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+        given(taskRepository.findById(task.getId())).willReturn(Optional.of(task));
         Assertions.assertDoesNotThrow(() -> taskService.markTaskAsFinished(task.getId()));
         Mockito.verify(taskRepository).findById(task.getId());
         Mockito.verify(taskRepository).markTaskAsFinished(task.getId());
@@ -118,14 +118,14 @@ class TaskServiceTest {
     @Test
     void markTaskAsFinishedWithNonExistentIdTest() {
         Long nonExistentId = 999L;
-        when(taskRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+        given(taskRepository.findById(nonExistentId)).willReturn(Optional.empty());
         Assertions.assertThrows(ToDoExceptions.class, () -> taskService.markTaskAsFinished(nonExistentId));
         Mockito.verify(taskRepository).findById(nonExistentId);
     }
 
     @Test
     void deleteTaskTest() {
-        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
+        given(taskRepository.findById(task.getId())).willReturn(Optional.of(task));
         Assertions.assertDoesNotThrow(() -> taskService.deleteTask(task.getId()));
         Mockito.verify(taskRepository).findById(task.getId());
         Mockito.verify(taskRepository).deleteById(task.getId());
@@ -139,7 +139,7 @@ class TaskServiceTest {
     @Test
     void deleteTaskTestWithNonExistentIdTest() {
         Long nonExistentId = 999L;
-        when(taskRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+        given(taskRepository.findById(nonExistentId)).willReturn(Optional.empty());
         Assertions.assertThrows(ToDoExceptions.class, () -> taskService.markTaskAsFinished(nonExistentId));
         Mockito.verify(taskRepository).findById(nonExistentId);
     }
