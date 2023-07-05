@@ -8,15 +8,14 @@ La API REST de ToDo es una aplicación sencilla que permite a los usuarios crear
 
 - CRUD básico de tareas.
 - Documentación de la API generada con Swagger.
-- Pruebas unitarias escritas con JUnit 5.
+- Pruebas unitarias escritas con JUnit 5 y Mockito.
 - Dockerizada para facilitar la implementación.
 - Soporte para conexión a bases de datos MySQL externas mediante variables de entorno.
 - Demo desplegado en el servicio Container Apps de Azure.
 
 ## Requisitos
 
-- Spring Boot 3.1 requerirá Java 17 como versión mínima.
-- Docker (opcional).
+- Docker.
 
 ## Instalación
 
@@ -29,22 +28,23 @@ Para instalar la API REST de ToDo utilizando Docker, sigue estos pasos:
 
 Si deseas utilizar una base de datos MySQL externa en lugar de la base de datos en memoria H2 predeterminada, puedes configurar las siguientes variables de entorno antes de iniciar el contenedor Docker:
 
+#### Cambia los valores por defecto de la DB embebida:
+- `DB_CONNECTOR`: `com.mysql.cj.jdbc.Driver` para dejar de usar el conector por defecto de H2.
+- `DB_DIALECT`: `org.hibernate.dialect.MySQLDialect` es el dielect adecuado para conectar con MySQL.
+
+#### Conecta con tu base de datos:
 - `DB_HOST`: La URL JDBC completa del servidor de base de datos MySQL, incluyendo el nombre del host, el puerto y el nombre de la base de datos. Por ejemplo: `jdbc:mysql://<host>:<port>/<dbname>`.
 - `DB_USER`: El nombre de usuario para conectarse a la base de datos MySQL.
 - `DB_PASSWORD`: La contraseña para conectarse a la base de datos MySQL.
 
-Además puedes configurar estas variables de entorno antes de iniciar la aplicación para personalizar su comportamiento.
-
-
+#### Personalizar el comportamiento de la app:
 - `JPA_SHOW_SQL`: Si se establece en `true`, muestra las consultas SQL generadas por JPA en la consola.
 - `JPA_DDL_AUTO`: Configura el comportamiento de generación automática del esquema de la base de datos por parte de JPA. Se recomienda establecerlo en `none` para que no se realiza ninguna acción en el esquema de la base de datos al inicio de la aplicación.
 
-
 Para configurar estas variables de entorno al iniciar el contenedor Docker, puedes utilizar la opción `-e` del comando `docker run`. Por ejemplo:
-
-Copiar
-docker run -p 8080:8080 -e DB_HOST=jdbc:mysql://`<host>`:`<dbport>`/`<dbname>` -e DB_USER=`<user>` -e DB_PASSWORD=`<password>` -e JPA_SHOW_SQL=`false` -e JPA_DDL_AUTO=`none` <nombre-de-la-imagen>
-
+~~~
+docker run -p 8080:8080 -e DB_HOST=jdbc:mysql://<host>:<dbport>/<dbname>-e DB_USER=<user> -e DB_PASSWORD=<password> -e JPA_SHOW_SQL=false -e JPA_DDL_AUTO=none -e DB_CONNECTOR=com.mysql.cj.jdbc.Driver -e DB_DIALECT=org.hibernate.dialect.MySQLDialect <nombre-de-la-imagen>
+~~~
 
 Reemplaza `<host>`, `<dbport>`, `<dbname>`, `<user>` y `<password>` con los valores apropiados para tu servidor de base de datos MySQL antes de ejecutar el comando.
 
