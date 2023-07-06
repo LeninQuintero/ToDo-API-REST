@@ -37,13 +37,9 @@ Si deseas utilizar una base de datos MySQL externa en lugar de la base de datos 
 - `DB_USER`: El nombre de usuario para conectarse a la base de datos MySQL.
 - `DB_PASSWORD`: La contraseña para conectarse a la base de datos MySQL.
 
-#### Personalizar el comportamiento de la app:
-- `JPA_SHOW_SQL`: Si se establece en `true`, muestra las consultas SQL generadas por JPA en la consola.
-- `JPA_DDL_AUTO`: Configura el comportamiento de generación automática del esquema de la base de datos por parte de JPA. Se recomienda establecerlo en `none` para que no se realiza ninguna acción en el esquema de la base de datos al inicio de la aplicación.
-
 Para configurar estas variables de entorno al iniciar el contenedor Docker, puedes utilizar la opción `-e` del comando `docker run`. Por ejemplo:
 ~~~
-docker run -p 8080:8080 -e DB_HOST=jdbc:mysql://<host>:<dbport>/<dbname>-e DB_USER=<user> -e DB_PASSWORD=<password> -e JPA_SHOW_SQL=false -e JPA_DDL_AUTO=none -e DB_CONNECTOR=com.mysql.cj.jdbc.Driver -e DB_DIALECT=org.hibernate.dialect.MySQLDialect <nombre-de-la-imagen>
+docker run -p 8080:8080 -e DB_HOST=jdbc:mysql://<host>:<dbport>/<dbname>-e DB_USER=<user> -e DB_PASSWORD=<password> -e DB_CONNECTOR=com.mysql.cj.jdbc.Driver -e DB_DIALECT=org.hibernate.dialect.MySQLDialect <nombre-de-la-imagen>
 ~~~
 
 Reemplaza `<host>`, `<dbport>`, `<dbname>`, `<user>` y `<password>` con los valores apropiados para tu servidor de base de datos MySQL antes de ejecutar el comando.
