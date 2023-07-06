@@ -54,7 +54,7 @@ Puedes utilizar la API REST de ToDo para crear, leer, actualizar y eliminar tare
 
 ## Demo
 
-Puedes probar la aplicación desplegada en [este enlace](<https://todoapp-sql.redisland-33a6c0f1.westus2.azurecontainerapps.io/swagger-ui/index.html>).
+Puedes probar la aplicación desplegada en [este enlace](<https://todoapp-cleversql.proudsand-5bd1a271.westus2.azurecontainerapps.io/swagger-ui/index.html>).
 
 ## Licencia
 
